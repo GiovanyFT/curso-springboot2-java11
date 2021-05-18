@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.educandoweb.course.entities.pk.OrderItemPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_order_item")
@@ -14,7 +15,7 @@ public class OrderItem implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private OrderItemPK id;
+	private OrderItemPK id = new OrderItemPK();
 	
 	private Integer quantity;
 	private Double price;
@@ -28,7 +29,12 @@ public class OrderItem implements Serializable{
 		this.quantity = quantity;
 		this.price = price;
 	}
-
+	
+	/* Esse @JsonIgnore evitará que, no carregamento dos OrderItems de um Order
+	 * fiquemos em loop na navegabilidade dupla. Ou seja, vai evitar que o 
+	 * framework tente carregar o Order do OrderItem (que já está carregado|)
+	 */
+	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}
