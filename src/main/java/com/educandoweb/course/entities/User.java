@@ -31,7 +31,7 @@ public class User implements Serializable {
 	 * 
 	 * Isso é importante para evitar um loop infinito numa navegabilidade
 	 * dupla. Se não existisse o framework entra em loop e fica indo e voltando
-	 * na navegabilidade gerando u Json gigante até travar
+	 * na navegabilidade gerando um Json gigante até travar
 	 */
 	
 	@JsonIgnore
