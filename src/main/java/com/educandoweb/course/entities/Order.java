@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,11 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /* O @Table foi necessário porque a palavra Order é usada pelo SQL
  * gerando conflito. Nesse contexto, no banco a tabela precisará ter outro nome
@@ -42,6 +43,14 @@ public class Order implements Serializable{
 	
 	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<>();
+	
+	/* cascade = CascadeType.ALL fará a chave primária de
+	 * Payment ser a chave primária de Order, ou melhor, 
+	 * fará com que os valores de id de Order sejam usados
+	 * com id de Payment
+	 */
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+	private Payment payment;
 	
 	public Order() {}
 
@@ -88,6 +97,16 @@ public class Order implements Serializable{
 	
 	public Set<OrderItem> getItems(){
 		return items;
+	}
+
+	
+	
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
 	}
 
 	@Override
