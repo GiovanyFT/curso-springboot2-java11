@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.repositories.UserRepository;
+import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 import com.educandoweb.course.entities.User;
 
 /* Quando colocamos a annotation @Component estamos fazendo o registro de
@@ -35,7 +36,8 @@ public class UserService {
 	
 	public User findById(Long id) {
 		Optional<User> optional =  repository.findById(id);
-		return optional.get();
+		// Vai obter o usuário e caso não exista vai disparar a Exceção personalizada
+		return optional.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public User insert(User obj) {
